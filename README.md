@@ -2,11 +2,11 @@
 
 ## Author
 
-You fill this out
+Kyle Sherman
 
 ## Description
 
-This will be the description of the assignment
+Basic overview of classes in C#.
 
 ### Notes
 
