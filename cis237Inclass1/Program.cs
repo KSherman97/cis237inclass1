@@ -48,8 +48,15 @@ namespace cis237Inclass1
 
             // instanciate a new UI class
             UserInterface UI = new UserInterface();
+
+            // Static version of the UI class
+            // we don't have to instantiate this class since it's static
+            // it's instantiated at the beginning of the class
+            //StaticUserInterface.GetUserInput();
+
             // get the user input from the UI class
             int choice = UI.GetUserInput();
+            // int choice = StaticUserInterface.GetUserInput(); // example with using the static UI class
 
             // continue until 2(exit) is entered as the menue value
             while (choice != 2)
