@@ -42,8 +42,12 @@ namespace cis237Inclass1
         // *************************************************
 
         // returns the Firstname and Lastname when printing myEmployee
+        // usint the override keyword, the method will override the automatic one that comes 
+        // with ever single object that is created.
         public override string ToString()
         {
+            // the this keyword is used to reference 'this' class. 
+            // it allows us to reference things that are declard at this classes 'class level'
             return this._firstNameString + " " + this._lastNameString;
         }
 
@@ -63,6 +67,8 @@ namespace cis237Inclass1
         }
 
         // Defualt Constructor
+        // an empty constructor
+        // we must add it back once we create another constructor
         public Employee() 
         {
             // do nothing
