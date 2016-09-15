@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace cis237Inclass1
 {
@@ -33,13 +34,18 @@ namespace cis237Inclass1
 
             // assign values to the array. Each spot needs to contain an instance of an Employee
             // call the constructor of the Employee class and store the info into the array indexes
-            employees[0] = new Employee("James", "Cameron", 1200m); // index 1
-            employees[1] = new Employee("Seba", "Weber", 5000m);    // index 2
-            employees[2] = new Employee("John", "Hampton", 5000m);  // index 3
-            employees[3] = new Employee("RIP", "Harambe", 2500m);   // index 4
-            employees[4] = new Employee("James", "Kirk", 1500.25m); // index 5
-            
-            
+            //employees[0] = new Employee("James", "Cameron", 1200m); // index 1
+            //employees[1] = new Employee("Seba", "Weber", 5000m);    // index 2
+            //employees[2] = new Employee("John", "Hampton", 5000m);  // index 3
+            //employees[3] = new Employee("RIP", "Harambe", 2500m);   // index 4
+            //employees[4] = new Employee("James", "Kirk", 1500.25m); // index 5
+
+
+            // instantiate the CSVProcessor method that we wrote into main to load the 
+            // employees from the csv file
+            ImportCSV("employees.csv", employees);
+
+
             // instanciate a new UI class
             UserInterface UI = new UserInterface();
             // get the user input from the UI class
@@ -73,7 +79,68 @@ namespace cis237Inclass1
                 Console.Clear();
                 choice = UI.GetUserInput(); // prompt the user to enter some input again
             }
+        }
 
+        // CSV Reader
+        // dependency injection (good coding practice) https://msdn.microsoft.com/en-us/library/hh323705(v=vs.100).aspx
+        static bool ImportCSV(string pathToCSVFile, Employee[] employees)
+        {
+            // declares a new variables for a StreamReader object. Not instantiating it yet
+            StreamReader streamReader = null;// requiers: using System.IO; set default to null
+
+            // start a try since the path to the file could be incorrect, and thus throwing an exception
+            try
+            {
+                // Declare a string for each line we will read in
+                string line;
+
+                // instantiate the streamreader object
+                streamReader = new StreamReader(pathToCSVFile);
+
+                // initialize a counter variable to 0 for the while loop
+                int counter = 0;
+
+                // check if the file has reached a null yet
+                // while there is a line to read, read it and put it in the line var
+                while((line = streamReader.ReadLine()) != null)
+                {
+                    // call the process line method and send over the read in line 
+                    // the employees array (which is passed by reference automatically)
+                    // and the counter, which will be used as the index for the array.
+                    // We are also incrementing the counter after we send it in with the ++ operator
+                    processLine(line, employees, counter++);
+                }
+                return true; // once the end of the file has been reached, return true
+            }
+            catch(Exception Ex)
+            {
+                // if something went wrong then print it to the console
+                Console.WriteLine(Ex.ToString() + Environment.NewLine + Ex.StackTrace);
+                return false; // return false, stating that an exception has occured
+            }
+            finally // once the try / catch has completed, finish doing this stuff. Do it whether try is successful or not
+            {
+                // if there is a file to close then you need to close it before continuing on with the program
+                if(streamReader != null) 
+                {
+                    streamReader.Close();
+                }
+            }
+        }
+
+        static void processLine(string line, Employee[] employees, int index)
+        {
+            // declares a string array and assigns the split line to it.
+            string[] parts = line.Split(',');
+
+            // assign the parts to local variables that mean something
+            string firstName = parts[0];
+            string lastName = parts[1];
+            decimal salary = decimal.Parse(parts[2]);
+
+            // Use the variables to instanciate a new employee and assign it to 
+            // the spot in the employees array indexed by the index that was passed in.
+            employees[index] = new Employee(firstName, lastName, salary);
         }
     }
 }
